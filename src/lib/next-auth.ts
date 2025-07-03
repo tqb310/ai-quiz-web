@@ -1,6 +1,7 @@
 import { DefaultSession, NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/PrismaClient";
+import GoogleProvider from "next-auth/providers/google";
 
 declare module "next-auth" {
     interface Session {
@@ -33,11 +34,19 @@ const authOptions: NextAuthOptions = {
         async session({ session, token }) {
             if (session.user) {
                 session.user.id = token.id as string;
+                session.user.name = token.name as string;
+                session.user.email = token.email as string;
+                session.user.image = token.image as string;
             }
             return session;
         },
     },
     adapter: PrismaAdapter(prisma),
-    providers: [],
+    providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        }),
+    ],
 };
 export default authOptions;
