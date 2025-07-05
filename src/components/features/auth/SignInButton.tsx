@@ -3,7 +3,11 @@
 import { Button } from '@/components/ui/button';
 import { signIn } from 'next-auth/react';
 
-const SignInButton = () => {
+type Props = {
+  children?: React.ReactNode;
+};
+
+const SignInButton = ({ children = 'Sign In' }: Props) => {
   const handleSignIn = async () => {
     try {
       await signIn('google');
@@ -18,7 +22,7 @@ const SignInButton = () => {
       className="rounded-md"
       onClick={handleSignIn}
     >
-      Sign In
+      {children}
     </Button>
   );
 };
