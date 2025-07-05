@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import Navbar from '@/components/partials/Navbar';
 import './globals.css';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import AuthProvider from '@/components/providers/AuthProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,8 +36,17 @@ export default function RootLayout({
         )}
         suppressHydrationWarning
       >
-        <Navbar />
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <Navbar />
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -30,6 +30,9 @@ const authOptions: NextAuthOptions = {
         });
         if (user) {
           token.id = user.id;
+          token.name = user.name;
+          token.email = user.email;
+          token.image = user.image;
         }
       }
       return token;
