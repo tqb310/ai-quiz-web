@@ -1,20 +1,21 @@
 'use client';
 import React from 'react';
-import { History } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import SimpleCard from '@/components/ui/simple-card';
+import CustomWordCloud from './CustomWordCloud';
 type Props = {};
 
-const HistoryCard = (props: Props) => {
+const HotTopicsCard = (props: Props) => {
   const router = useRouter();
   return (
     <SimpleCard
-      title="History"
-      icon={<History size={24} strokeWidth={2.5} />}
-      content="View past quiz attempts"
+      title="Hot Topics"
+      description="Click to start a quiz on it!"
+      content={<CustomWordCloud />}
       onClick={() => router.push('/history')}
+      className="lg:col-span-4"
     />
   );
 };
 
-export default HistoryCard;
+export default HotTopicsCard;

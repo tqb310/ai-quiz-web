@@ -132,3 +132,8 @@
 @utility flex-center {
   @apply flex items-center justify-center;
 }
+
+html body[data-scroll-locked] {
+  overflow: visible !important;
+  padding-top: calc(var(--spacing) * 16) !important;
+}

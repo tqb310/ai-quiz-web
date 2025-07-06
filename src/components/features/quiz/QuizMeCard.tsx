@@ -11,8 +11,8 @@ const QuizMeCard = (props: Props) => {
   return (
     <SimpleCard
       title="Quiz Me!"
-      icon={<BrainCircuit size={28} strokeWidth={2.5} />}
-      description="Quiz Me! is a quiz game that allows you to test your knowledge on a topic."
+      icon={<BrainCircuit size={24} strokeWidth={2.5} />}
+      content="Quiz Me! is a quiz game that allows you to test your knowledge on a topic."
       onClick={() => router.push('/quiz')}
     />
   );
