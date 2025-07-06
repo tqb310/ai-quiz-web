@@ -47,6 +47,10 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@theme {
+  --padding-container: 2rem;
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -123,4 +127,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@utility flex-center {
+  @apply flex items-center justify-center;
 }
