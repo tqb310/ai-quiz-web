@@ -12,7 +12,7 @@ const HotTopicsCard = (props: Props) => {
       title="Hot Topics"
       description="Click to start a quiz on it!"
       content={<CustomWordCloud />}
-      onClick={() => router.push('/history')}
+      onClick={() => router.push('/quiz')}
       className="lg:col-span-4"
     />
   );

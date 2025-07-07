@@ -10,5 +10,5 @@ export default async function ProtectedLayout({
   if (!session?.user) {
     return redirect('/');
   }
-  return <div>{children}</div>;
+  return <div className="h-full w-full">{children}</div>;
 }

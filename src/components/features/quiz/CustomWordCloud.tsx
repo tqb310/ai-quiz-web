@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-// import D3WordCloud from 'react-d3-cloud';
 import data from '@/constants/D3WordCloudData';
 import { useTheme } from 'next-themes';
 import dynamic from 'next/dynamic';

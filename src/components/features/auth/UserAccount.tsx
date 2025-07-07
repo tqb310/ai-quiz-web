@@ -23,7 +23,6 @@ type Props = {
 };
 
 const UserAccount = ({ user }: Props) => {
-  console.log('tqb test', user);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
