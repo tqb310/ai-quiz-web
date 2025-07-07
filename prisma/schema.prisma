@@ -25,6 +25,8 @@ model User {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Game Game[]
 }
  
 model Account {
@@ -69,4 +71,36 @@ model VerificationToken {
   expires    DateTime
  
   @@unique([identifier, token])
+}
+
+enum GameType {
+  MCQ
+  OPEN_ENDED
+}
+
+model Game {
+  id            String @id @default(cuid())
+  userId        String
+  gameType      GameType
+  topic         String
+  timeStarted   DateTime
+  timeEnded     DateTime?
+  questions     Question[]
+  user          User   @relation(fields: [userId], references: [id])
+  @@index([userId], name: "userId")
+}
+
+model Question {
+  id                  String @id @default(cuid())
+  gameId              String
+  question            String
+  answer              String
+  options             Json? @db.Json
+  percentageCorrect   Float?
+  isCorrect           Boolean?
+  questionType        GameType
+  userAnswer          String? @db.Text
+  game                Game   @relation(fields: [gameId], references: [id])
+  @@index([gameId], name: "gameId")
+  @@index([id], name: "id")
 }
