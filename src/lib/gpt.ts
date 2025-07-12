@@ -1,31 +1,45 @@
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { AIAdapter } from '@/adapters/type';
 
 interface OutputFormat {
   [key: string]: string | string[] | OutputFormat;
 }
 
+interface StrictOutputParams {
+  system_prompt: string;
+  user_prompt: string | string[];
+  output_format: OutputFormat;
+  default_category?: string;
+  output_value_only?: boolean;
+  model?: string;
+  temperature?: number;
+  num_tries?: number;
+  verbose?: boolean;
+  list_input?: boolean;
+}
+
 export async function strict_output(
-  system_prompt: string,
-  user_prompt: string | string[],
-  output_format: OutputFormat,
-  default_category: string = '',
-  output_value_only: boolean = false,
-  model: string = 'gpt-4.1',
-  temperature: number = 1,
-  num_tries: number = 3,
-  verbose: boolean = false
+  params: StrictOutputParams,
+  AIAdapter: AIAdapter
 ): Promise<
   {
     question: string;
     answer: string;
   }[]
 > {
+  const {
+    system_prompt,
+    user_prompt,
+    output_format,
+    default_category = '',
+    output_value_only = false,
+    model = 'gpt-4.1',
+    temperature = 1,
+    num_tries = 3,
+    verbose = false,
+    list_input = true,
+  } = params;
+
   // if the user input is in a list, we also process the output as a list of json
-  const list_input: boolean = Array.isArray(user_prompt);
   // if the output format contains dynamic elements of < or >, then add to the prompt to handle dynamic elements
   const dynamic_elements: boolean = /<.*?>/.test(
     JSON.stringify(output_format)
@@ -58,7 +72,7 @@ export async function strict_output(
     }
 
     // Use OpenAI to get a response
-    const response = await openai.chat.completions.create({
+    const response = await AIAdapter.generate({
       temperature: temperature,
       model: model,
       messages: [
@@ -73,11 +87,11 @@ export async function strict_output(
       ],
     });
 
-    let res: string =
-      response.choices[0].message?.content?.replace(
-        /'/g,
-        '"'
-      ) ?? '';
+    let handledResponse = /json\n([\s\S]*)\n/.exec(
+      response || ''
+    );
+
+    let res: string = handledResponse?.[1] ?? '';
 
     // ensure that we don't replace away apostrophes in text
     res = res.replace(/(\w)"(\w)/g, "$1'$2");
@@ -155,6 +169,7 @@ export async function strict_output(
       error_msg = `\n\nResult: ${res}\n\nError message: ${e}`;
       console.log('An exception occurred:', e);
       console.log('Current invalid json format:', res);
+      throw e;
     }
   }
 

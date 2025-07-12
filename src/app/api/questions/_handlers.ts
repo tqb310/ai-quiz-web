@@ -31,7 +31,10 @@ export async function PostHandler(req: NextRequest) {
             question: question.question,
             answer: question.answer,
             options: JSON.stringify(options),
-            questionType: type as GameType,
+            questionType:
+              type === 'mcq'
+                ? GameType.MCQ
+                : GameType.OPEN_ENDED,
             gameId: gameId,
           };
         }
@@ -45,7 +48,10 @@ export async function PostHandler(req: NextRequest) {
           return {
             question: question.question,
             answer: question.answer,
-            questionType: type as GameType,
+            questionType:
+              type === 'mcq'
+                ? GameType.MCQ
+                : GameType.OPEN_ENDED,
             gameId: gameId,
           };
         }

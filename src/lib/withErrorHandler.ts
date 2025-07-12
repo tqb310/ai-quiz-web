@@ -1,3 +1,4 @@
+import { UnauthorizedError } from '@/services/models';
 import { NextRequest, NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 
@@ -16,6 +17,12 @@ export function withErrorHandler(
         return NextResponse.json(
           { error: error.issues },
           { status: 400 }
+        );
+      }
+      if (error instanceof UnauthorizedError) {
+        return NextResponse.json(
+          { error: error.message },
+          { status: 401 }
         );
       }
       return NextResponse.json(

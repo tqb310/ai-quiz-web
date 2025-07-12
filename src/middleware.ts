@@ -1,17 +1,13 @@
+import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthSession } from './lib/next-auth';
 
-export async function middleware(req: NextRequest) {
-  const session = await getAuthSession();
-  if (!session?.user) {
-    return NextResponse.json(
-      {
-        error: 'Unauthorized',
-      },
-      {
-        status: 401,
-      }
-    );
+export async function middleware() {
+  const c = await cookies();
+
+  if (!c.get('next-auth.session-token')?.value?.trim()) {
+    return new Response('Unauthorized, log in first', {
+      status: 401,
+    });
   }
 
   return NextResponse.next();

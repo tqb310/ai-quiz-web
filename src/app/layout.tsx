@@ -5,6 +5,8 @@ import Navbar from '@/components/partials/Navbar';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import AuthProvider from '@/components/providers/AuthProvider';
+import QueryProvider from '@/components/providers/QueryProvider';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -36,17 +38,20 @@ export default function RootLayout({
         )}
         suppressHydrationWarning
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <AuthProvider>
-            <Navbar />
-            {children}
-          </AuthProvider>
-        </ThemeProvider>
+        <QueryProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <AuthProvider>
+              <Navbar />
+              {children}
+            </AuthProvider>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

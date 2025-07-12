@@ -20,12 +20,31 @@ import {
   RadioGroupItem,
 } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { gameAPI } from '@/services/game.api';
+import { useMutation } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 type Props = {};
 
 type QuizCreationType = z.infer<typeof quizCreationSchema>;
 
 const CreateQuizForm = (props: Props) => {
+  const router = useRouter();
+  const { mutate: createGame, isPending } = useMutation({
+    mutationFn: gameAPI.createGame,
+    onSuccess: ({ gameId }) => {
+      if (form.getValues('type') === 'mcq') {
+        router.push(`/play/mcq/${gameId}`);
+      } else {
+        router.push(`/play/open-ended/${gameId}`);
+      }
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   const form = useForm<QuizCreationType>({
     resolver: zodResolver(quizCreationSchema),
     defaultValues: {
@@ -36,7 +55,7 @@ const CreateQuizForm = (props: Props) => {
   });
 
   const onSubmit = (data: QuizCreationType) => {
-    console.log(data);
+    createGame(data);
   };
 
   return (
@@ -136,8 +155,16 @@ const CreateQuizForm = (props: Props) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Create Quiz
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isPending}
+        >
+          {isPending ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            'Create Quiz'
+          )}
         </Button>
       </form>
     </Form>
