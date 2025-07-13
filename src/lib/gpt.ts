@@ -36,7 +36,7 @@ export async function strict_output(
     temperature = 1,
     num_tries = 3,
     verbose = false,
-    list_input = true,
+    list_input,
   } = params;
 
   // if the user input is in a list, we also process the output as a list of json
@@ -87,11 +87,12 @@ export async function strict_output(
       ],
     });
 
-    let handledResponse = /json\n([\s\S]*)\n/.exec(
+    let handledResponse = /(json)?\n([\s\S]*)\n/.exec(
       response || ''
     );
-
-    let res: string = handledResponse?.[1] ?? '';
+    console.log('tqb response', response);
+    console.log('tqb handledResponse', handledResponse);
+    let res: string = handledResponse?.[2] ?? '';
 
     // ensure that we don't replace away apostrophes in text
     res = res.replace(/(\w)"(\w)/g, "$1'$2");

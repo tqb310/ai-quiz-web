@@ -1,4 +1,7 @@
-import { UnauthorizedError } from '@/services/models';
+import {
+  NotFoundError,
+  UnauthorizedError,
+} from '@/services/models';
 import { NextRequest, NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 
@@ -13,10 +16,17 @@ export function withErrorHandler(
     try {
       return await handler(req);
     } catch (error) {
+      console.log('error', error);
       if (error instanceof ZodError) {
         return NextResponse.json(
           { error: error.issues },
           { status: 400 }
+        );
+      }
+      if (error instanceof NotFoundError) {
+        return NextResponse.json(
+          { error: error.message },
+          { status: 404 }
         );
       }
       if (error instanceof UnauthorizedError) {

@@ -14,5 +14,9 @@ export async function middleware() {
 }
 
 export const config = {
-  matcher: ['/api/questions/:path*', '/api/game/:path*'],
+  matcher: [
+    '/api/questions/:path*',
+    '/api/game/:path*',
+    '/api/checkAnswer/:path*',
+  ],
 };

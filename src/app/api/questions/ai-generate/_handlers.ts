@@ -19,6 +19,7 @@ export async function PostHandler(req: NextRequest) {
             question: 'question',
             answer: 'answer with max length of 15 words',
           },
+          list_input: amount > 1,
         },
         new OpenAIAdapter()
       );
@@ -37,7 +38,10 @@ export async function PostHandler(req: NextRequest) {
               '2nd option with max length of 15 words',
             option3:
               '3rd option with max length of 15 words',
+            option4:
+              '4th option with max length of 15 words',
           },
+          list_input: amount > 1,
         },
         new OpenAIAdapter()
       );

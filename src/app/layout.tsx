@@ -7,6 +7,7 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import AuthProvider from '@/components/providers/AuthProvider';
 import QueryProvider from '@/components/providers/QueryProvider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -49,6 +50,14 @@ export default function RootLayout({
             <AuthProvider>
               <Navbar />
               {children}
+              <Toaster
+                toastOptions={{
+                  classNames: {
+                    success: 'bg-green-500 text-white',
+                    error: 'bg-red-500 text-white',
+                  },
+                }}
+              />
             </AuthProvider>
           </ThemeProvider>
         </QueryProvider>

@@ -8,6 +8,7 @@ type MCQQuestion = {
   option1: string;
   option2: string;
   option3: string;
+  option4: string;
 };
 
 type OpenEndedQuestion = {
@@ -20,12 +21,19 @@ export async function PostHandler(req: NextRequest) {
     const body = await req.json();
     const { questions, type, gameId } = body;
     if (body.type === 'mcq') {
-      const mappedQuestions = questions.map(
+      let arrayQuestions: MCQQuestion[] = [];
+      if (Array.isArray(questions)) {
+        arrayQuestions = questions;
+      } else {
+        arrayQuestions = [questions];
+      }
+      const mappedQuestions = arrayQuestions.map(
         (question: MCQQuestion) => {
           const options = [
             question.option1,
             question.option2,
             question.option3,
+            question.option4,
           ];
           return {
             question: question.question,
@@ -43,7 +51,13 @@ export async function PostHandler(req: NextRequest) {
         data: mappedQuestions,
       });
     } else if (body.type === 'open_ended') {
-      const mappedQuestions = questions.map(
+      let arrayQuestions: OpenEndedQuestion[] = [];
+      if (Array.isArray(questions)) {
+        arrayQuestions = questions;
+      } else {
+        arrayQuestions = [questions];
+      }
+      const mappedQuestions = arrayQuestions.map(
         (question: OpenEndedQuestion) => {
           return {
             question: question.question,
